@@ -1,0 +1,64 @@
+name: Build and Deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: docker build -t nextjs-builder .
+
+      - name: Run Docker container
+        run: docker create --name temp-nextjs-build nextjs-builder
+
+      - name: Copy build artifacts
+        run: docker cp temp-nextjs-build:/app/out ./out
+
+      - name: Clean up Docker container
+        run: docker rm temp-nextjs-build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Sync files to S3
+        run: aws s3 sync ./out s3://$AWS_S3_BUCKET --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+
+      - name: Invalidate CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID --paths "/*"
+        env:
+          AWS_DIST_ID: ${{ secrets.AWS_DIST_ID }}
+
+  notify_failure:
+    name: "Notify Failure"
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    steps:
+      - name: Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=❌ Deployment Failed"
+
+  notify_success:
+    name: "Notify Success"
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    if: ${{ success() }}
+    steps:
+      - name: Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=✅ Deployment Successful"
