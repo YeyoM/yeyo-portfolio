@@ -14,8 +14,7 @@ export default function Home({ allPostsData }) {
         {/* Hero */}
         <div className="flex flex-col w-[90%] max-w-[990px] mt-36">
           <h3 className="text-3xl font-normal text-black tracking-wide sm:text-4xl md:text-5xl">
-            hey, this is Diego! <br />
-            an aspiring{" "}
+            hey, this is Diego! <br />a{" "}
             <span className="font-semibold italic text-[#2292BF]">
               {" "}
               site reliability engineer{" "}
@@ -29,17 +28,40 @@ export default function Home({ allPostsData }) {
           <p className="text-md font-normal text-black tracking-wide">
             Currently.{" "}
             <span className="italic font-semibold">
-              Computer Science student @ UAA
+              Site Reliability Enginer Intern{" "}
+              <a
+                href="https://careers.petco.com/us/en"
+                target="_blank"
+                className="italic text-[#2292BF]"
+              >
+                @Petco{" "}
+              </a>
+              & Computer Science student{" "}
+              <a
+                href="https://www.uaa.mx/portal/"
+                target="_blank"
+                className="italic text-[#2292BF]"
+              >
+                @UAA{" "}
+              </a>
             </span>
           </p>
-          <p className="text-md font-normal text-black tracking-wide">
+          <p className="text-md font-light text-black tracking-wide">
             Previously.{" "}
             <span className="italic font-semibold">
-              Site Reliability Engineer Fellow @ MLH{" "}
+              Site Reliability Engineer Fellow{" "}
+              <a
+                href="https://fellowship.mlh.io/"
+                target="_blank"
+                className="italic text-[#2292BF]"
+              >
+                @MLH{" "}
+              </a>
             </span>
           </p>
           <p className="text-md font-normal text-black tracking-wide">
-            Status. <span className="italic font-semibold">Open to work </span>
+            Status.{" "}
+            <span className="italic font-semibold">Not open to work </span>
           </p>
         </div>
         {/* Experience */}
@@ -48,6 +70,39 @@ export default function Home({ allPostsData }) {
             Experience
           </p>
           <hr className="w-full border-black border-opacity-50 mt-2" />
+          <div className="flex sm:flex-row flex-col items-center justify-between mt-10">
+            <div className="flex flex-row items-center justify-center">
+              <Image
+                src="/petco.png"
+                alt="petco-logo"
+                width={100}
+                height={100}
+                className="w-[100px] h-[100px]"
+              />
+              <div className="flex flex-col ml-4">
+                <p className="sm:text-[1rem] text-sm font-semibold text-black tracking-wide">
+                  Petco
+                </p>
+                <p className="sm:text-[1rem] text-sm font-normal text-black tracking-wide italic">
+                  Site Reliability Engineer Intern
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
+              <Link
+                className="sm:text-[1rem] text-sm font-semibold text-[#878787] tracking-wide hover:cursor-not-allowed	decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center ml-2"
+                href=""
+              >
+                Learn more
+                <Image
+                  src="/arrow.png"
+                  alt="arrow-right"
+                  width={20}
+                  height={20}
+                />
+              </Link>
+            </div>
+          </div>
           <div className="flex sm:flex-row flex-col items-center justify-between mt-10">
             <div className="flex flex-row items-center justify-center">
               <Image
@@ -156,7 +211,7 @@ export default function Home({ allPostsData }) {
               />
               <div className="flex flex-col ml-4">
                 <p className="sm:text-[1rem] text-sm font-semibold text-black tracking-wide">
-                  Personal Portfolio
+                  Personal Portfolio (old version)
                 </p>
                 <p className="sm:text-[1rem] text-sm font-normal text-black tracking-wide italic">
                   My personal portfolio

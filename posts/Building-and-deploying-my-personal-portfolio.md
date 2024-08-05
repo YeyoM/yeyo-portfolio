@@ -1,6 +1,6 @@
 ---
-title: "Building and deploying my personal portfolio"
-date: "2024-06-10"
+title: "Building and deploying my personal portfolio with Next.js, Docker, and Nginx"
+date: "2024-04-10"
 image: "https://images.unsplash.com/photo-1613690399151-65ea69478674?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 ---
 

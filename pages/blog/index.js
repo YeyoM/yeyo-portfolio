@@ -22,7 +22,7 @@ export default function Blog({ allPostsData }) {
             {allPostsData.map(({ id, date, title }) => (
               <li key={id}>
                 <a
-                  href={`/blog/${id}.html`}
+                  href={`/blog/${id}`}
                   className="text-lg font-semibold text-[#2292BF] hover:underline"
                 >
                   {title}
