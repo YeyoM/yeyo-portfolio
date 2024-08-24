@@ -30,7 +30,7 @@ export default function Navbar() {
           </Link>
           <span className="text-gray-600">/</span>
           <Link
-            href="https://drive.google.com/file/d/189w1ZftPhTsdMcLlOGAJrNfk8v9-Gzzl/view?usp=sharing"
+            href="https://drive.google.com/file/d/1B9FCc_jH7Otgd3nvsPenJtQ1P4eZHLNz/view?usp=sharing"
             target="_blank"
             className="text-gray-600 hover:text-gray-900 hover:font-medium underline decoration-2 decoration-[#2292BF] sm:tracking-wider"
           >
