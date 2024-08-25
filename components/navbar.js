@@ -16,14 +16,14 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center space-x-1 sm:space-x-4 text-sm sm:text-lg ml-8 sm:mr-6">
           <Link
-            href="/about"
+            href="/about.html"
             className="text-gray-600 hover:text-gray-900 hover:font-medium underline decoration-2 decoration-[#2292BF] sm:tracking-wider"
           >
             about me
           </Link>
           <span className="text-gray-600">/</span>
           <Link
-            href="/blog"
+            href="/blog.html"
             className="text-gray-600 hover:text-gray-900 hover:font-medium underline decoration-2 decoration-[#2292BF] sm:tracking-wider"
           >
             blog

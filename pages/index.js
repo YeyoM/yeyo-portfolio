@@ -124,7 +124,7 @@ export default function Home({ allPostsData }) {
             <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
               <Link
                 className="sm:text-[1rem] text-sm font-semibold text-[#2292BF] tracking-wide hover:underline decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center ml-2"
-                href="/mlh-fellowship"
+                href="/mlh-fellowship.html"
               >
                 Learn more
                 <Image
@@ -146,7 +146,7 @@ export default function Home({ allPostsData }) {
           {allPostsData.map(({ id, date, title }) => (
             <div key={id} className="mt-4">
               <Link
-                href={`/blog/${id}`}
+                href={`/blog/${id}.html`}
                 className="text-lg font-semibold text-[#2292BF] hover:underline"
               >
                 {title}
@@ -188,7 +188,7 @@ export default function Home({ allPostsData }) {
             <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
               <Link
                 className="sm:text-[1rem] text-sm font-semibold text-[#2292BF] tracking-wide hover:underline decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center"
-                href="/better-commits"
+                href="/better-commits.html"
               >
                 Learn more
                 <Image
@@ -224,7 +224,7 @@ export default function Home({ allPostsData }) {
             <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
               <Link
                 className="sm:text-[1rem] text-sm font-semibold text-[#2292BF] tracking-wide hover:underline decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center"
-                href="/portfolio"
+                href="/portfolio.html"
               >
                 Learn more
                 <Image
@@ -260,7 +260,7 @@ export default function Home({ allPostsData }) {
             <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
               <Link
                 className="sm:text-[1rem] text-sm font-semibold text-[#2292BF] tracking-wide hover:underline decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center"
-                href="/wellness"
+                href="/wellness.html"
               >
                 Learn more
                 <Image
@@ -296,7 +296,7 @@ export default function Home({ allPostsData }) {
             <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
               <Link
                 className="sm:text-[1rem] text-sm font-semibold text-[#2292BF] tracking-wide hover:underline decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center"
-                href="/lofi-terminal"
+                href="/lofi-terminal.html"
               >
                 Learn more
                 <Image
@@ -332,7 +332,7 @@ export default function Home({ allPostsData }) {
             <div className="flex flex-row items-center justify-center sm:ml-2 ml-0 sm:mt-0 mt-4">
               <Link
                 className="sm:text-[1rem] text-sm font-semibold text-[#2292BF] tracking-wide hover:underline decoration-2 decoration-[#2292BF] flex flex-row items-center justify-center"
-                href="/cocktail-please"
+                href="/cocktail-please.html"
               >
                 Learn more
                 <Image
