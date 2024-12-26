@@ -1,0 +1,8 @@
+Resources I have for the portfolio:
+
+- S3 bucket called yeyom.tech
+- S3 bucket called www.yeyom.tech
+- Route 53 hosted zone for yeyom.tech
+- Certificate for yeyom.tech
+- IAM Policy to deploy the website (CloudFront write access and S3 read and write access)
+- CloudFront distribution for yeyom.tech
