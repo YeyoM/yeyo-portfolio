@@ -1,31 +1,31 @@
 variable "aws_region" {
   description = "AWS Region"
-  default     = "us-east-1"
   type        = string
+  nullable    = false
 }
 
 variable "s3_bucket_name_terraform_state" {
   description = "Name of the S3 bucket for the Terraform state"
-  default     = "yeyo-terraform-state-bucket"
   type        = string
+  nullable    = false
 }
 
 variable "s3_bucket_name_portfolio" {
   description = "Name of the S3 bucket for the portfolio"
-  default     = "yeyom.tech"
   type        = string
+  nullable    = false
 }
 
 variable "s3_bucket_name_portfolio_www" {
   description = "Name of the S3 bucket for the portfolio"
-  default     = "www.yeyom.tech"
   type        = string
+  nullable    = false
 }
 
 variable "domain_name" {
   description = "Domain name"
-  default     = "yeyom.tech"
   type        = string
+  nullable    = false
 }
 
 variable "acm_certificate_arn" {
