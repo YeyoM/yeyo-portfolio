@@ -5,3 +5,7 @@ output "s3_bucket_terraform_state_arn" {
 output "s3_bucket_portfolio_arn" {
   value = aws_s3_bucket.yeyom_tech.arn
 }
+
+output "s3_bucket_portfolio_www_arn" {
+  value = aws_s3_bucket.www_yeyom_tech.arn
+}
