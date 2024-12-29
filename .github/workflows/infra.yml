@@ -25,9 +25,9 @@ env:
   TF_VAR_cache_policy_id: ${{ secrets.TF_VAR_CACHE_POLICY_ID }}
   TF_VAR_domain_name: ${{ secrets.TF_VAR_DOMAIN_NAME }}
   TF_VAR_ns_records_names: "${{ secrets.TF_VAR_NS_RECORDS_NAMES }}"
-  TF_VAR_bucket_name_portfolio: ${{ secrets.TF_VAR_BUCKET_NAME_PORTFOLIO }}
-  TF_VAR_bucket_name_portfolio_www: ${{ secrets.TF_VAR_BUCKET_NAME_PORTFOLIO_WWW }}
-  TF_VAR_bucket_name_terraform_state: ${{ secrets.TF_VAR_BUCKET_NAME_TERRAFORM_STATE }}
+  TF_VAR_s3_bucket_name_portfolio: ${{ secrets.TF_VAR_S3_BUCKET_NAME_PORTFOLIO }}
+  TF_VAR_s3_bucket_name_portfolio_www: ${{ secrets.TF_VAR_S3_BUCKET_NAME_PORTFOLIO_WWW }}
+  TF_VAR_s3_bucket_name_terraform_state: ${{ secrets.TF_VAR_S3_BUCKET_NAME_TERRAFORM_STATE }}
   TF_VAR_s3_origin_id: ${{ secrets.TF_VAR_S3_ORIGIN_ID }}
   TF_VAR_s3_origin_name: ${{ secrets.TF_VAR_S3_ORIGIN_NAME }}
   TF_VAR_s3_website_origin_id: ${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_ID }}
