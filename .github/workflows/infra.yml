@@ -3,7 +3,7 @@ name: Build Infrastructure
 on:
   push:
     branches:
-      - 6-terraform-github-actions
+      - main
     paths:
       - "infra/**"
   pull_request:
