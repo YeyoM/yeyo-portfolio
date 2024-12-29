@@ -48,7 +48,7 @@ export default function Post({ postData }) {
           height={400}
           className="mt-6 mb-2 rounded-sm"
         />
-        <div className="flex flex-col w-[90%] max-w-[720px] mt-6 mb-40 text-justify [&>ol]:list-none [&>ol>li]:list-inside [&>ol>li]:py-1 [&>*]:mb-8 [&>h3]:text-2xl [&>p]:text-md [&>pre>code>span]:text-sm">
+        <div className="flex flex-col w-[90%] max-w-[720px] mt-6 mb-40 text-justify [&>ol]:list-none [&>ol>li]:list-inside [&>ol>li]:py-1 [&>*]:mb-8 [&>h3]:text-2xl [&>p]:text-md [&>pre>code>span]:text-sm text-black">
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
             components={customRenderers}
