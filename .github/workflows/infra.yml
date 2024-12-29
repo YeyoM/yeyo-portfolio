@@ -32,7 +32,7 @@ env:
   TF_VAR_s3_origin_name: ${{ secrets.TF_VAR_S3_ORIGIN_NAME }}
   TF_VAR_s3_website_origin_id: ${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_ID }}
   TF_VAR_s3_website_origin_name: ${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_NAME }}
-  TF_VAR_soa_record_name: ${{ secrets.TF_VAR_SOA_RECORD_NAME }}
+  TF_VAR_soa_record_name: "${{ secrets.TF_VAR_SOA_RECORD_NAME }}"
   TF_VAR_www_aaaa_record_name: ${{ secrets.TF_VAR_WWW_AAAA_RECORD_NAME }}
   TF_VAR_www_a_record_name: ${{ secrets.TF_VAR_WWW_A_RECORD_NAME }}
 
