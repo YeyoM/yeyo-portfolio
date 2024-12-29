@@ -25,7 +25,9 @@ resource "aws_iam_policy" "deploy_user_policy" {
         ],
         "Resource" : [
           "arn:aws:s3:::yeyom.tech",
-          "arn:aws:s3:::yeyom.tech/*"
+          "arn:aws:s3:::yeyom.tech/*",
+          "arn:aws:s3:::yeyo-terraform-state-bucket",
+          "arn:aws:s3:::yeyo-terraform-state-bucket/*"
         ]
       },
       {
