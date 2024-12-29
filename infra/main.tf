@@ -32,6 +32,7 @@ resource "aws_iam_policy" "deploy_user_policy" {
                 "iam:GetUserPolicy",
                 "iam:GetPolicy",
                 "iam:GetPolicyVersion",
+                "iam:ListAttachedUserPolicies",
                 "sts:GetSessionToken"
             ],
             "Resource": "*"
