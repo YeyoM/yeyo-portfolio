@@ -1,0 +1,139 @@
+name: Build Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+      - "**terraform**"
+    paths:
+      - "infra/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_S3_TERRAFORM_STATE_BUCKET: ${{ secrets.TF_VAR_BUCKET_NAME_TERRAFORM_STATE }}
+
+jobs:
+  terraform:
+    name: "Terraform"
+    environment: production
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./infra
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform variables
+        run: |
+          echo "Setting Terraform variables"
+          export TF_VAR_aaaa_record_name=${{ secrets.TF_VAR_AAAA_RECORD_NAME }} 
+          export TF_VAR_acm_certificate_arn=${{ secrets.TF_VAR_ACM_CERTIFICATE_ARN }}
+          export TF_VAR_aws_access_key_id_deploy=${{ secrets.TF_VAR_AWS_ACCESS_KEY_ID_DEPLOY }}
+          export TF_VAR_aws_access_key_id_github_actions=${{ secrets.TF_VAR_AWS_ACCESS_KEY_ID_GITHUB_ACTIONS }}
+          export TF_VAR_aws_region=${{ secrets.TF_VAR_AWS_REGION }}
+          export TF_VAR_a_record_name=${{ secrets.TF_VAR_A_RECORD_NAME }}
+          export TF_VAR_cache_policy_id=${{ secrets.TF_VAR_CACHE_POLICY_ID }}
+          export TF_VAR_domain_name=${{ secrets.TF_VAR_DOMAIN_NAME }}
+          export TF_VAR_ns_records_names=${{ secrets.TF_VAR_NS_RECORDS_NAMES }}
+          export TF_VAR_bucket_name_portfolio=${{ secrets.TF_VAR_BUCKET_NAME_PORTFOLIO }}
+          export TF_VAR_bucket_name_portfolio_www=${{ secrets.TF_VAR_BUCKET_NAME_PORTFOLIO_WWW }}
+          export TF_VAR_bucket_name_terraform_state=${{ secrets.TF_VAR_BUCKET_NAME_TERRAFORM_STATE }}
+          export TF_VAR_s3_origin_id=${{ secrets.TF_VAR_S3_ORIGIN_ID }}
+          export TF_VAR_s3_origin_name=${{ secrets.TF_VAR_S3_ORIGIN_NAME }}
+          export TF_VAR_s3_website_origin_id=${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_ID }}
+          export TF_VAR_s3_website_origin_name=${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_NAME }}
+          export TF_VAR_soa_record_name=${{ secrets.TF_VAR_SOA_RECORD_NAME }}
+          export TF_VAR_www_aaaa_record_name=${{ secrets.TF_VAR_WWW_AAAA_RECORD_NAME }}
+          export TF_VAR_www_a_record_name=${{ secrets.TF_VAR_WWW_A_RECORD_NAME }}
+          echo "Terraform variables set"
+          echo "echoing an example variable"
+          echo "TF_VAR_aws_region: $TF_VAR_aws_region"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.10.3
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform init --backend-config="bucket=$AWS_S3_TERRAFORM_STATE_BUCKET"
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+
+      - name: Update Pull Request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform plan\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`terraform\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+
+  notify_failure:
+    name: "Notify Failure"
+    runs-on: ubuntu-latest
+    needs: build-infra
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    steps:
+      - name: Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=❌ Infrastructure Deployment Failed"
+
+  notify_success:
+    name: "Notify Success"
+    runs-on: ubuntu-latest
+    needs: build-infra
+    if: ${{ success() }}
+    steps:
+      - name: Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=✅ Infrastructure Deployment was Successful"
