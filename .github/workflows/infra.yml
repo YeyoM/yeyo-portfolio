@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - "**terraform**"
+      - 6-terraform-github-actions
     paths:
       - "infra/**"
   pull_request:
