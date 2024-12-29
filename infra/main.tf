@@ -30,6 +30,7 @@ resource "aws_iam_policy" "deploy_user_policy" {
                 "iam:ListUserPolicies",
                 "iam:GetUser",
                 "iam:GetUserPolicy",
+                "iam:GetPolicy",
                 "sts:GetSessionToken"
             ],
             "Resource": "*"
