@@ -14,26 +14,29 @@ resource "aws_iam_policy" "deploy_user_policy" {
   {
     "Version" : "2012-10-17",
     "Statement" : [
-      {
-        "Sid" : "S3Access",
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:ListBucket",
-          "s3:DeleteObject"
-        ],
-        "Resource" : [
-          "arn:aws:s3:::yeyom.tech",
-          "arn:aws:s3:::yeyom.tech/*"
-        ]
-      },
-      {
-        "Sid" : "CloudFrontInvalidation",
-        "Effect" : "Allow",
-        "Action" : "cloudfront:CreateInvalidation",
-        "Resource" : "arn:aws:cloudfront::381492127423:distribution/E263PASPP9Q18Z"
-      }
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*",
+                "route53:*",
+                "cloudfront:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListUsers",
+                "iam:ListUserPolicies",
+                "iam:GetUser",
+                "iam:GetUserPolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:ListAttachedUserPolicies",
+                "sts:GetSessionToken"
+            ],
+            "Resource": "*"
+        }
     ]
   }
   EOT

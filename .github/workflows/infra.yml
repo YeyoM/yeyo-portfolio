@@ -1,0 +1,101 @@
+name: Build Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_S3_TERRAFORM_STATE_BUCKET: ${{ secrets.TF_VAR_S3_BUCKET_NAME_TERRAFORM_STATE }}
+  TF_VAR_aaaa_record_name: ${{ secrets.TF_VAR_AAAA_RECORD_NAME }}
+  TF_VAR_acm_certificate_arn: ${{ secrets.TF_VAR_ACM_CERTIFICATE_ARN }}
+  TF_VAR_aws_access_key_id_deploy: ${{ secrets.TF_VAR_AWS_ACCESS_KEY_ID_DEPLOY }}
+  TF_VAR_aws_access_key_id_github_actions: ${{ secrets.TF_VAR_AWS_ACCESS_KEY_ID_GITHUB_ACTIONS }}
+  TF_VAR_aws_region: ${{ secrets.TF_VAR_AWS_REGION }}
+  TF_VAR_a_record_name: ${{ secrets.TF_VAR_A_RECORD_NAME }}
+  TF_VAR_cache_policy_id: ${{ secrets.TF_VAR_CACHE_POLICY_ID }}
+  TF_VAR_domain_name: ${{ secrets.TF_VAR_DOMAIN_NAME }}
+  TF_VAR_ns_records_names: "${{ secrets.TF_VAR_NS_RECORDS_NAMES }}"
+  TF_VAR_s3_bucket_name_portfolio: ${{ secrets.TF_VAR_S3_BUCKET_NAME_PORTFOLIO }}
+  TF_VAR_s3_bucket_name_portfolio_www: ${{ secrets.TF_VAR_S3_BUCKET_NAME_PORTFOLIO_WWW }}
+  TF_VAR_s3_bucket_name_terraform_state: ${{ secrets.TF_VAR_S3_BUCKET_NAME_TERRAFORM_STATE }}
+  TF_VAR_s3_origin_id: ${{ secrets.TF_VAR_S3_ORIGIN_ID }}
+  TF_VAR_s3_origin_name: ${{ secrets.TF_VAR_S3_ORIGIN_NAME }}
+  TF_VAR_s3_website_origin_id: ${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_ID }}
+  TF_VAR_s3_website_origin_name: ${{ secrets.TF_VAR_S3_WEBSITE_ORIGIN_NAME }}
+  TF_VAR_soa_record_name: "${{ secrets.TF_VAR_SOA_RECORD_NAME }}"
+  TF_VAR_www_aaaa_record_name: ${{ secrets.TF_VAR_WWW_AAAA_RECORD_NAME }}
+  TF_VAR_www_a_record_name: ${{ secrets.TF_VAR_WWW_A_RECORD_NAME }}
+
+jobs:
+  terraform:
+    name: "Terraform"
+    environment: production
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./infra
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.10.3
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform init --backend-config="bucket=$AWS_S3_TERRAFORM_STATE_BUCKET"
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+
+  notify_failure:
+    name: "Notify Failure"
+    runs-on: ubuntu-latest
+    needs: terraform
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    steps:
+      - name: Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=❌ Infrastructure Deployment Failed"
+
+  notify_success:
+    name: "Notify Success"
+    runs-on: ubuntu-latest
+    needs: terraform
+    if: ${{ success() }}
+    steps:
+      - name: Discord Message
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=✅ Infrastructure Deployment was Successful"
